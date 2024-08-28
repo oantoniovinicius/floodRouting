@@ -56,7 +56,7 @@ public class mainControl implements Initializable{
   @Override
   public void initialize(URL location, ResourceBundle resources) {
 
-    backgroundControl(1);
+    screen.setVisible(false);
 
     try {
       System.out.println("Current directory: " + new java.io.File(".").getCanonicalPath());
@@ -65,8 +65,6 @@ public class mainControl implements Initializable{
     }
     ColorAdjust colorAdjust = new ColorAdjust();
     colorAdjust.setBrightness(0.5);
-
-    screen.setVisible(false);
 
     version1.setOnMouseEntered(event -> {
       version1.setEffect(colorAdjust);
@@ -135,7 +133,7 @@ public class mainControl implements Initializable{
     int totalNodes = Integer.parseInt(graph.get(0).replaceAll(";", ""));
     System.out.println("Numero de nós: ");
 
-    if(totalNodes > 20){
+    if(totalNodes > 12){
       Alert alert = new Alert(AlertType.WARNING);
       alert.setTitle("Aviso");
       alert.setHeaderText("O número de roteadores deve ser menor!");
@@ -211,7 +209,7 @@ public class mainControl implements Initializable{
         nodes.get(i).listConnections();
       }
 
-      //changeScreen();
+      changeScreen();
       selectFirstNode();
     }
   }
@@ -291,7 +289,7 @@ public class mainControl implements Initializable{
           nodes.get(nodeSender - 1).sendPackets(TTL, -1);
           //start.setDisable(true);
           //start.setVisible(false);
-          backgroundControl(0);
+          screen.setVisible(true);
         } else {
           System.out.println("Erro");
         }
@@ -305,16 +303,19 @@ public class mainControl implements Initializable{
       switch (source.getId()) { // Verifica qual botao foi escolhido
         case "version1":
         System.out.println("Botão 1 selecionado!");
+        screen.setVisible(true);
         setVersionSelected(1);
         break;
         
         case "version2":
         System.out.println("Botão 2 selecionado!");
+        screen.setVisible(true);
         setVersionSelected(2);
         break;
         
         case "version3":
         System.out.println("Botão 3 selecionado!");
+        screen.setVisible(true);
         setVersionSelected(3);
         break;
         
@@ -327,16 +328,26 @@ public class mainControl implements Initializable{
     }
   }
 
-  void backgroundControl(int verify){
-    if(verify == 0){
-      background.setVisible(false);
-      //start.setDisable(true);
-      //start.setVisible(false);
-      screen.setVisible(true);
-    } else {
-      background.setVisible(true);
-    }
+   //Alterna a troca entre telas
+   public void changeScreen() {
+
+    version1.setVisible(!version1.isVisible());
+    version1.setDisable(!version1.isDisable());
+
+    version2.setVisible(!version2.isVisible());
+    version2.setDisable(!version2.isDisable());
+
+    version3.setVisible(!version3.isVisible());
+    version3.setDisable(!version3.isDisable());
+
+    background.setVisible(!background.isVisible());
+    background.setDisable(!background.isDisable());
+
+    //help.setVisible(!help.isVisible());
+    //help.setDisable(!help.isDisable());
   }
+
+
 
   //getter and setters
 

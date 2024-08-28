@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="control.mainControl">
    <children>
@@ -19,16 +19,25 @@
                <image>
                   <Image url="@../imgs/version1.png" />
                </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </ImageView>
             <ImageView fx:id="version2" fitHeight="150.0" fitWidth="200.0" layoutX="350.0" layoutY="410.0" onMouseClicked="#versionSelected" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../imgs/version2.png" />
                </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </ImageView>
             <ImageView fx:id="version3" fitHeight="150.0" fitWidth="200.0" layoutX="350.0" layoutY="456.0" onMouseClicked="#versionSelected" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../imgs/version3.png" />
                </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </ImageView>
          </children>
       </Group>
@@ -38,6 +47,14 @@
                <image>
                   <Image url="@../imgs/screen.png" />
                </image>
+            </ImageView>
+            <ImageView fx:id="startButton" fitHeight="150.0" fitWidth="200.0" layoutX="648.0" layoutY="524.0" onMouseClicked="#clickStart" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../imgs/start.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </ImageView>
          </children>
       </Group>

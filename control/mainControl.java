@@ -37,6 +37,8 @@ public class mainControl implements Initializable{
   @FXML private ImageView nodeSent;
   @FXML private ImageView nodeReceive;
 
+  @FXML private ImageView startButton;
+
   ArrayList<String> graph = new ArrayList<>(); // Nos do Grafo para leitura do txt e implementacao visual
   ArrayList<Nodes> nodes = new ArrayList<>(); // Roteadores
   ArrayList<ImageView> nodeImage = new ArrayList<>(); // Imagem dos roteadores
@@ -56,6 +58,8 @@ public class mainControl implements Initializable{
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     screen.setVisible(false);
+    startButton.setVisible(false);
+    startButton.setDisable(true);
 
     ColorAdjust colorAdjust = new ColorAdjust();
     colorAdjust.setBrightness(0.5);
@@ -90,7 +94,7 @@ public class mainControl implements Initializable{
 
     try {
       File file = new File(backbone);
-      System.out.println("File exists: " + file.exists());
+      System.out.println("Backbone valido: " + file.exists());
 
       // Criação de um BufferedReader para ler o arquivo
       BufferedReader reader = new BufferedReader(new FileReader(backbone));
@@ -107,14 +111,14 @@ public class mainControl implements Initializable{
     } catch (IOException e) {
       Alert alert = new Alert(AlertType.WARNING);
       alert.setTitle("Aviso");
-      alert.setHeaderText("Ocorreu um erro ao ler o arquivo!!!!");
+      alert.setHeaderText("Ocorreu um erro ao ler o arquivo!");
       alert.showAndWait();
       
       return false;
     } catch (NumberFormatException e) {
       Alert alert = new Alert(AlertType.WARNING);
       alert.setTitle("Aviso");
-      alert.setHeaderText("Ocorreu um erro!");
+      alert.setHeaderText("Ocorreu um erro ao ler o arquivo!");
       alert.showAndWait();
 
       return false;
@@ -149,9 +153,9 @@ public class mainControl implements Initializable{
 
         // Adicionando No/roteador na classe de roteadores com seu respectivo id
         // Adicionando no Arraylist de roteadores esse roteador
-        Nodes Router = new Nodes(i + 1);
-        Router.setController(this);
-        nodes.add(Router);
+        Nodes router = new Nodes(i + 1);
+        router.setController(this);
+        nodes.add(router);
 
         // Definindo as coordenadas X e Y para os numeros
         double labelX = x - 32;
@@ -181,7 +185,7 @@ public class mainControl implements Initializable{
       // Montagem visual do Grafo
       // Adiciona as polylines ao root primeiro
       for (Polyline polyline : lines) {
-        polyline.setStroke(Color.WHITE);
+        polyline.setStroke(Color.BLACK);
         polyline.setStrokeWidth(2);
         root.getChildren().add(polyline);
       }
@@ -262,6 +266,56 @@ public class mainControl implements Initializable{
     }
   }
 
+  @FXML
+  void clickStart(MouseEvent event) {
+    switch (getVersionSelected()) {
+      case 3:
+        if(nodeReceiver != -1 && nodeSender != -1){
+              /*TTL = valorTTL.getValue();
+              valorTTL.setVisible(false);
+              valorTTL.setDisable(true);
+              BoxTTL.setVisible(false);
+              BoxTTL.setDisable(true);
+              //Inicia a Transmissao
+              Roteadores.get(nodeInicial-1).EnviarPacotes(TTL, -1);
+              botaoComecar.setVisible(false);
+              botaoComecar.setDisable(true);
+              botaoResetar.setVisible(true);
+              botaoResetar.setDisable(false);*/
+        }
+        else{
+          //alertaErro("Selecione o Transmissor e/ou Receptor");
+        }
+        break;
+
+      default: //Casos 1 ou 2
+      if(nodeReceiver != -1 && nodeSender != -1){
+            nodes.get(nodeSender-1).sendPackets(TTL, -1);
+            startButton.setVisible(false);
+            startButton.setDisable(true);
+            //botaoResetar.setVisible(true);
+            //botaoResetar.setDisable(false);
+        }
+        else{
+          //alertaErro("Selecione o Transmissor e/ou Receptor");
+        }
+        break;
+    }
+  }
+
+    //Remove grafo da tela
+  public void removeElementos(){
+    for (ImageView image : nodeImage) {
+      getRoot().getChildren().remove(image);
+    }
+    for (Polyline polyline : lines) {
+      getRoot().getChildren().remove(polyline);
+    }
+    for (Label label : numbers) {
+      getRoot().getChildren().remove(label);
+    }
+  }
+
   public void addPackets(){ 
     if(!received){
       totalPackets++;
@@ -274,23 +328,6 @@ public class mainControl implements Initializable{
   }
 
   @FXML
-  void optionSelected(MouseEvent event) {
-    switch(getVersionSelected()){
-      case 3:
-      break;
-      default:
-        if(nodeReceiver != -1 && nodeSender != -1){
-          nodes.get(nodeSender - 1).sendPackets(TTL, -1);
-          //start.setDisable(true);
-          //start.setVisible(false);
-          screen.setVisible(true);
-        } else {
-          System.out.println("Erro");
-        }
-    }
-  }
-
-  @FXML
   void versionSelected(MouseEvent event) {
     if(graphFlag){
       Node source = (Node) event.getSource();
@@ -298,18 +335,24 @@ public class mainControl implements Initializable{
         case "version1":
           System.out.println("Botão 1 selecionado!");
           screen.setVisible(true);
+          startButton.setVisible(true);
+          startButton.setDisable(false);
           setVersionSelected(1);
         break;
         
         case "version2":
           System.out.println("Botão 2 selecionado!");
           screen.setVisible(true);
+          startButton.setVisible(true);
+          startButton.setDisable(false);
           setVersionSelected(2);
         break;
         
         case "version3":
           System.out.println("Botão 3 selecionado!");
           screen.setVisible(true);
+          startButton.setVisible(true);
+          startButton.setDisable(false);
           setVersionSelected(3);
         break;
         
@@ -336,8 +379,6 @@ public class mainControl implements Initializable{
     background.setVisible(!background.isVisible());
     background.setDisable(!background.isDisable());
   }
-
-
 
   //getter and setters
   public ArrayList<Nodes> getNodes() {

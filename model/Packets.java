@@ -37,7 +37,7 @@ public class Packets extends Thread{
     mC = control;
 
     Root = root; // Salve a referência para o grupo raiz
-    packet = new ImageView(new Image("./assets/pacote.png"));
+    packet = new ImageView(new Image("./imgs/package.png"));
     Root.getChildren().add(packet);
     if(nodeSender > nodeReceiver){
       invertRoute = true;

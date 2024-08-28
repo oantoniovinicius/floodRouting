@@ -32,15 +32,39 @@ public class Nodes {
   public void sendPackets(int TTL, int firstNode){
     if(mC.getNodeReceiver() != this.id){
       switch (mC.getVersionSelected()) {
-        case 0://Version 1
+        case 1: //Version 1
           for(int i = 0; i < nodeConnection.size(); i++){
             Packets packet = new Packets(this.id, nodeConnection.get(i), pathConnection.get(i), mC.getRoot(), -1, mC);
             packetsCreated.add(packet);
             packet.start();
             mC.addPackets();
           }
-        break;
-      
+          break;
+        case 2:
+          for (int i = 0; i < nodeConnection.size(); i++) {
+          // Criando pacote e iniciando ele
+            if (nodeConnection.get(i) != firstNode) { // Se o No nao foi de quem ele recebeu, ele envia
+              Packets packet = new Packets(this.id, nodeConnection.get(i), pathConnection.get(i), mC.getRoot(), -1, mC);
+              packetsCreated.add(packet);
+              packet.start();
+              mC.addPackets();
+            }
+          }
+          break;
+        case 3:
+          if (TTL != 0) { // Verifica se o TTL esta zero, caso sim, nao reenvia mais o pacote
+            for (int i = 0; i < nodeConnection.size(); i++) { // Encaminha para todos execto para quem enviou e verifica o TTL
+            // Criando pacote e iniciando ele
+              if (nodeConnection.get(i) != firstNode) { // Se o No nao foi de quem ele recebeu, ele envia
+                // Passa o TTL-1, subtraindo 1 pulo do pacote
+                Packets Pacote = new Packets(this.id, nodeConnection.get(i), pathConnection.get(i), mC.getRoot(), TTL - 1, mC);
+                packetsCreated.add(Pacote);
+                Pacote.start();
+                mC.addPackets();
+              }
+            }
+          }
+          break;
         default:
             break;
       }

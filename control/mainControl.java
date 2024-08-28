@@ -229,8 +229,8 @@ public class mainControl implements Initializable{
           imageView.setOnMouseClicked(null);
           imageView.setCursor(null);
         }
-        nodeSent.setVisible(false);
-        nodeSent.setDisable(true);
+        //nodeSent.setVisible(false);
+        //nodeSent.setDisable(true);
         selectFinalNode();
       });
     }
@@ -238,8 +238,8 @@ public class mainControl implements Initializable{
 
   //Escolha no final
   public void selectFinalNode() {
-    nodeReceive.setVisible(true);
-    nodeReceive.setDisable(false);
+    //nodeReceive.setVisible(true);
+    //nodeReceive.setDisable(false);
 
     for (int i = 0; i < nodeImage.size(); i++) {
       if(i != getNodeSender()-1){ // Todos Nos possiveis, menos o inicial
@@ -255,8 +255,8 @@ public class mainControl implements Initializable{
             imageView.setOnMouseClicked(null);
             imageView.setCursor(null);
           }
-          nodeReceive.setVisible(false);
-          nodeReceive.setDisable(true);
+          //nodeReceive.setVisible(false);
+          //nodeReceive.setDisable(true);
           /*if(getOpcaoEscolhida() == 3){
             BoxTTL.setVisible(true);
             BoxTTL.setDisable(false);

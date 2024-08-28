@@ -125,92 +125,87 @@ public class mainControl implements Initializable{
     }
   }
 
-  public void addNode(Pane root){
-    ArrayList<Circle> routers = new ArrayList<>();
-
+  public void addNode(Pane root) { 
     int totalNodes = Integer.parseInt(graph.get(0).replaceAll(";", ""));
-    System.out.println("Numero de nós: ");
+    System.out.println("Numero de roteadores na rede: " + totalNodes);
 
-    if(totalNodes > 12){
-      Alert alert = new Alert(AlertType.WARNING);
-      alert.setTitle("Aviso");
-      alert.setHeaderText("O número de roteadores deve ser menor!");
-      alert.showAndWait();
+    if (totalNodes > 20) { //total de roteadores = 20
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setTitle("Erro!");
+        alert.setHeaderText("O número de roteadores deve ser menor ou igual a 20!");
+        alert.showAndWait();
     } else {
-      int numCircles = totalNodes;
-      double centerX = root.getWidth() / 2;
-      double centerY = (root.getHeight() / 2) + 20;
-      double radius = 210; 
-      double angleIncrement = 2 * Math.PI / numCircles;
+        ArrayList<Circle> routers = new ArrayList<>();
+        int numCircles = totalNodes;
+        double centerX = root.getWidth() / 2;
+        double centerY = (root.getHeight() / 2) + 20;
+        double radius = 210;  // Ajustar se necessário para acomodar 20 nós
+        double angleIncrement = 2 * Math.PI / numCircles;
 
-      for (int i = 0; i < numCircles; i++) {
-        double angle = -Math.PI / 2 + i * angleIncrement;
-        double x = centerX + radius * Math.cos(angle);
-        double y = centerY + radius * Math.sin(angle);
+        for (int i = 0; i < numCircles; i++) {
+            double angle = -Math.PI / 2 + i * angleIncrement;
+            double x = centerX + radius * Math.cos(angle);
+            double y = centerY + radius * Math.sin(angle);
 
-        Circle node = new Circle(x, y, 25); // Criando o Circulo na posicao
-        routers.add(node); // Adicionando no array de Nos para implementacao visual
+            Circle node = new Circle(x, y, 25);
+            routers.add(node);
 
-        // Adicionando No/roteador na classe de roteadores com seu respectivo id
-        // Adicionando no Arraylist de roteadores esse roteador
-        Nodes router = new Nodes(i + 1);
-        router.setController(this);
-        nodes.add(router);
+            Nodes router = new Nodes(i + 1);
+            router.setController(this);
+            nodes.add(router);
 
-        // Definindo as coordenadas X e Y para os numeros
-        double labelX = x - 32;
-        double labelY = y - 32;
+            double labelX = x - 32;
+            double labelY = y - 32;
 
-        // Adicionando números dentro dos círculos
-        Label label = new Label(Integer.toString(i + 1));
-        label.setLayoutX(labelX);
-        label.setLayoutY(labelY);
-        label.setTextFill(Color.WHITE);
-        numbers.add(label); // Adicionando no Array de Numeros
-      }
-
-      for (int i = 0; i < graph.size(); i++) {
-        String[] parts = graph.get(i).split(";"); // Remove os divisores
-        if (parts.length >= 2) { // Verificar se existem pelo menos dois elementos em parts
-          int node1 = Integer.parseInt(parts[0]); // Pega o no Inicial
-          int node2 = Integer.parseInt(parts[1]); // Pega o no final
-
-          Polyline polyline = new Polyline(routers.get(node1 - 1).getCenterX(), routers.get(node1 - 1).getCenterY(), routers.get(node2 - 1).getCenterX(), routers.get(node2 - 1).getCenterY());
-          lines.add(polyline); // Adicionando no array de linhas
-          nodes.get(node1 - 1).addConnection(node2, polyline); // Insere a Conexao dos Roteadores
-          nodes.get(node2 - 1).addConnection(node1, polyline); // Insere a Conexao Inversa dos Roteadores
+            Label label = new Label(Integer.toString(i + 1));
+            label.setLayoutX(labelX);
+            label.setLayoutY(labelY);
+            label.setTextFill(Color.WHITE);
+            numbers.add(label);
         }
-      }
 
-      // Montagem visual do Grafo
-      // Adiciona as polylines ao root primeiro
-      for (Polyline polyline : lines) {
-        polyline.setStroke(Color.BLACK);
-        polyline.setStrokeWidth(2);
-        root.getChildren().add(polyline);
-      }
+        for (int i = 0; i < graph.size(); i++) {
+            String[] parts = graph.get(i).split(";");
+            if (parts.length >= 2) {
+                int node1 = Integer.parseInt(parts[0]);
+                int node2 = Integer.parseInt(parts[1]);
 
-      // Adiciona os círculos ao root
-      for (Circle circle : routers) {
-        ImageView firstNode = new ImageView(new Image("./imgs/node.png"));
-        firstNode.setLayoutX(circle.getCenterX() - circle.getRadius());
-        firstNode.setLayoutY(circle.getCenterY() - circle.getRadius());
-        nodeImage.add(firstNode);
-        root.getChildren().add(firstNode);
-      }
+                Polyline polyline = new Polyline(
+                    routers.get(node1 - 1).getCenterX(), routers.get(node1 - 1).getCenterY(),
+                    routers.get(node2 - 1).getCenterX(), routers.get(node2 - 1).getCenterY()
+                );
+                lines.add(polyline);
+                nodes.get(node1 - 1).addConnection(node2, polyline);
+                nodes.get(node2 - 1).addConnection(node1, polyline);
+            }
+        }
 
-      // Adiciona os números ao root
-      for (Label label : numbers) {
-        root.getChildren().add(label);
-      }
-      for (int i = 0; i < nodes.size(); i++) {
-        nodes.get(i).listConnections();
-      }
+        for (Polyline polyline : lines) {
+            polyline.setStroke(Color.BLACK);
+            polyline.setStrokeWidth(2);
+            root.getChildren().add(polyline);
+        }
 
-      changeScreen();
-      selectFirstNode();
+        for (Circle circle : routers) {
+            ImageView firstNode = new ImageView(new Image("./imgs/node.png"));
+            firstNode.setLayoutX(circle.getCenterX() - circle.getRadius());
+            firstNode.setLayoutY(circle.getCenterY() - circle.getRadius());
+            nodeImage.add(firstNode);
+            root.getChildren().add(firstNode);
+        }
+
+        for (Label label : numbers) {
+            root.getChildren().add(label);
+        }
+
+        for (int i = 0; i < nodes.size(); i++) {
+            nodes.get(i).listConnections();
+        }
+
+        changeScreen();
+        selectFirstNode();
     }
-  }
+}
 
   //Escolha no inicial
   public void selectFirstNode() {
@@ -219,7 +214,7 @@ public class mainControl implements Initializable{
       final int posicao = i; // Armazena a posição atual do loop
       nodeImage.get(i).setOnMouseClicked(event -> {
         int aux = posicao+1;
-        System.out.println("No Transsmisor Selecionado: " + aux); // Imprime a posição
+        System.out.println("Roteador Transmissor: " + aux); // Imprime a posição
         setNodeInicial(aux); // Setando o valor do No Inicial
         nodeImage.get(posicao).setImage(new Image("./imgs/nodeSender.png"));
         // Remova o evento de clique de todas as imagens
@@ -245,7 +240,7 @@ public class mainControl implements Initializable{
         final int posicao = i; // Armazena a posição atual do loop
         nodeImage.get(i).setOnMouseClicked(event -> {
           int aux = posicao+1;
-          System.out.println("No Receptor Selecionado: " + aux); // Imprime a posição
+          System.out.println("Roteador Receptor: " + aux); // Imprime a posição
           setNodeFinal(aux); // Setando o valor do No Inicial
           nodeImage.get(posicao).setImage(new Image("./imgs/nodeReceiver.png"));
           // Remova o evento de clique de todas as imagens
@@ -333,7 +328,7 @@ public class mainControl implements Initializable{
       Node source = (Node) event.getSource();
       switch (source.getId()) { // Verifica qual botao foi escolhido
         case "version1":
-          System.out.println("Botão 1 selecionado!");
+          System.out.println("Versao 1 foi selecionada.");
           screen.setVisible(true);
           startButton.setVisible(true);
           startButton.setDisable(false);
@@ -341,7 +336,7 @@ public class mainControl implements Initializable{
         break;
         
         case "version2":
-          System.out.println("Botão 2 selecionado!");
+          System.out.println("Versao 2 foi selecionada.");
           screen.setVisible(true);
           startButton.setVisible(true);
           startButton.setDisable(false);
@@ -349,14 +344,11 @@ public class mainControl implements Initializable{
         break;
         
         case "version3":
-          System.out.println("Botão 3 selecionado!");
+          System.out.println("Versao 3 foi selecionada.");
           screen.setVisible(true);
           startButton.setVisible(true);
           startButton.setDisable(false);
           setVersionSelected(3);
-        break;
-        
-        default:
         break;
       }
       if(readBackbone()){

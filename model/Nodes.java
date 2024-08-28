@@ -11,6 +11,7 @@ public class Nodes {
   private ArrayList<Integer> nodeConnection = new ArrayList<>(); // Qual No esse Roteador CONECTA
   private ArrayList<Polyline> pathConnection = new ArrayList<>(); //Caminho em px desse roteador ate o No que ele conecta
   private ArrayList<Packets> packetsCreated = new ArrayList<>(); //Pacotes Gerados por esse Router
+  boolean controlRecebimento = false;
 
   public Nodes(int id){
     this.id = id;
@@ -68,13 +69,21 @@ public class Nodes {
         default:
             break;
       }
+    } else {
+      if(!controlRecebimento){
+        System.out.println("Roteador [ "+ id + " ] recebeu o Pacote");
+        controlRecebimento = !controlRecebimento;
+        mC.packetReceived(this.id);
+        mC.setReceived(true);
+      }
     }
   }
 
   public void listConnections() {
-    System.out.println("Roteador ID: [ " + id + " ] Se Conecta com:");
+    System.out.println("Roteador " + id + " se conecta com:");
+    System.out.print("Roteador ");
     for (int i = 0; i < nodeConnection.size(); i++) {
-      System.out.println("Conexoes: " + nodeConnection.get(i));
+      System.out.print(nodeConnection.get(i) + ", ");
     }
     System.out.println("");
   }

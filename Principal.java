@@ -6,8 +6,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 import control.mainControl;
 
 public class Principal extends Application{
@@ -24,7 +22,7 @@ public class Principal extends Application{
       controller.setPane((Pane) fxmlStart);
     
 
-    //stagePrimary.getIcons().add(new Image("./assets/icon.png"));
+      primaryStage.getIcons().add(new Image("./imgs/icon.png"));
       primaryStage.setTitle("Flood Routing");
       primaryStage.setScene(new Scene(fxmlStart));
       primaryStage.setResizable(false);

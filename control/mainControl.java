@@ -55,14 +55,8 @@ public class mainControl implements Initializable{
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-
     screen.setVisible(false);
 
-    try {
-      System.out.println("Current directory: " + new java.io.File(".").getCanonicalPath());
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
     ColorAdjust colorAdjust = new ColorAdjust();
     colorAdjust.setBrightness(0.5);
 
@@ -120,7 +114,7 @@ public class mainControl implements Initializable{
     } catch (NumberFormatException e) {
       Alert alert = new Alert(AlertType.WARNING);
       alert.setTitle("Aviso");
-      alert.setHeaderText("Ocorreu um erro AAA!");
+      alert.setHeaderText("Ocorreu um erro!");
       alert.showAndWait();
 
       return false;
@@ -302,21 +296,21 @@ public class mainControl implements Initializable{
       Node source = (Node) event.getSource();
       switch (source.getId()) { // Verifica qual botao foi escolhido
         case "version1":
-        System.out.println("Botão 1 selecionado!");
-        screen.setVisible(true);
-        setVersionSelected(1);
+          System.out.println("Botão 1 selecionado!");
+          screen.setVisible(true);
+          setVersionSelected(1);
         break;
         
         case "version2":
-        System.out.println("Botão 2 selecionado!");
-        screen.setVisible(true);
-        setVersionSelected(2);
+          System.out.println("Botão 2 selecionado!");
+          screen.setVisible(true);
+          setVersionSelected(2);
         break;
         
         case "version3":
-        System.out.println("Botão 3 selecionado!");
-        screen.setVisible(true);
-        setVersionSelected(3);
+          System.out.println("Botão 3 selecionado!");
+          screen.setVisible(true);
+          setVersionSelected(3);
         break;
         
         default:
@@ -330,7 +324,6 @@ public class mainControl implements Initializable{
 
    //Alterna a troca entre telas
    public void changeScreen() {
-
     version1.setVisible(!version1.isVisible());
     version1.setDisable(!version1.isDisable());
 
@@ -342,15 +335,11 @@ public class mainControl implements Initializable{
 
     background.setVisible(!background.isVisible());
     background.setDisable(!background.isDisable());
-
-    //help.setVisible(!help.isVisible());
-    //help.setDisable(!help.isDisable());
   }
 
 
 
   //getter and setters
-
   public ArrayList<Nodes> getNodes() {
     return nodes;
   }

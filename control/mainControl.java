@@ -16,9 +16,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
@@ -30,6 +34,9 @@ public class mainControl implements Initializable{
   @FXML private ImageView version1;
   @FXML private ImageView version2;
   @FXML private ImageView version3;
+  @FXML private ImageView helpButton;
+  @FXML private ImageView helpScreen;
+
 
   @FXML private ImageView background;
   @FXML private ImageView screen;
@@ -37,6 +44,7 @@ public class mainControl implements Initializable{
   @FXML private ImageView nodeSent;
   @FXML private ImageView nodeReceive;
 
+  @FXML private ImageView sendButton;
   @FXML private ImageView startButton;
   @FXML private ImageView selectSender;
   @FXML private ImageView selectReceiver;
@@ -44,6 +52,9 @@ public class mainControl implements Initializable{
   @FXML private Label totalPackages;
   @FXML private Label senderId;
   @FXML private Label receiverId;
+
+  @FXML private ImageView BoxTTL;
+  @FXML private Spinner<Integer> textTTL;
 
   ArrayList<String> graph = new ArrayList<>(); // Nos do Grafo para leitura do txt e implementacao visual
   ArrayList<Nodes> nodes = new ArrayList<>(); // Roteadores
@@ -64,6 +75,8 @@ public class mainControl implements Initializable{
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    textTTL.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 3));
+
     screen.setVisible(false);
     startButton.setVisible(false);
     startButton.setDisable(true);
@@ -102,6 +115,14 @@ public class mainControl implements Initializable{
 
     startButton.setOnMouseExited(event -> {
       startButton.setEffect(null);
+    });
+
+    helpButton.setOnMouseEntered(event -> {
+      helpScreen.setVisible(true);
+    });
+
+    helpButton.setOnMouseExited(event -> {
+      helpScreen.setVisible(false);
     });
   }
     
@@ -274,14 +295,6 @@ public class mainControl implements Initializable{
             imageView.setOnMouseClicked(null);
             imageView.setCursor(null);
           }
-          //nodeReceive.setVisible(false);
-          //nodeReceive.setDisable(true);
-          /*if(getOpcaoEscolhida() == 3){
-            BoxTTL.setVisible(true);
-            BoxTTL.setDisable(false);
-            valorTTL.setVisible(true);
-            valorTTL.setDisable(false);
-          }*/
           receiverId.setText(Integer.toString(getNodeReceiver()));
           selectReceiver.setVisible(false);
           startButton.setVisible(true);
@@ -296,39 +309,31 @@ public class mainControl implements Initializable{
     switch (getVersionSelected()) {
       case 3:
         if(nodeReceiver != -1 && nodeSender != -1){
-              /*TTL = valorTTL.getValue();
-              valorTTL.setVisible(false);
-              valorTTL.setDisable(true);
-              BoxTTL.setVisible(false);
-              BoxTTL.setDisable(true);
               //Inicia a Transmissao
-              Roteadores.get(nodeInicial-1).EnviarPacotes(TTL, -1);
-              botaoComecar.setVisible(false);
-              botaoComecar.setDisable(true);
-              botaoResetar.setVisible(true);
-              botaoResetar.setDisable(false);*/
+              nodes.get(nodeSender-1).sendPackets(TTL, -1);
+              startButton.setVisible(false);
+              startButton.setDisable(true);
+              //botaoResetar.setVisible(true);
+              //botaoResetar.setDisable(false);
         }
         else{
-          //alertaErro("Selecione o Transmissor e/ou Receptor");
+          showAlert("Erro!", "Selecione o Transmissor e/ou Receptor");
         }
         break;
 
       default: //Casos 1 ou 2
-      if(nodeReceiver != -1 && nodeSender != -1){
-            nodes.get(nodeSender-1).sendPackets(TTL, -1);
-            startButton.setVisible(false);
-            startButton.setDisable(true);
-            //botaoResetar.setVisible(true);
-            //botaoResetar.setDisable(false);
-        }
-        else{
-          //alertaErro("Selecione o Transmissor e/ou Receptor");
-        }
+        if(nodeReceiver != -1 && nodeSender != -1){
+          nodes.get(nodeSender-1).sendPackets(TTL, -1);
+          startButton.setVisible(false);
+          startButton.setDisable(true);
+          //botaoResetar.setVisible(true);
+          //botaoResetar.setDisable(false);
+        } 
         break;
     }
   }
 
-    //Remove grafo da tela
+  //Remove grafo da tela
   public void removeElementos(){
     for (ImageView image : nodeImage) {
       getRoot().getChildren().remove(image);
@@ -360,25 +365,55 @@ public class mainControl implements Initializable{
         case "version1":
           System.out.println("Versao 1 foi selecionada.");
           screen.setVisible(true);
+          BoxTTL.setVisible(true);
+          BoxTTL.setDisable(false);
+          textTTL.setVisible(true);
+          textTTL.setDisable(false);
+          sendButton.setVisible(true);
+          sendButton.setDisable(false);
           setVersionSelected(1);
         break;
         
         case "version2":
           System.out.println("Versao 2 foi selecionada.");
           screen.setVisible(true);
+          BoxTTL.setVisible(true);
+          BoxTTL.setDisable(false);
+          textTTL.setVisible(true);
+          textTTL.setDisable(false);
+          sendButton.setVisible(true);
+          sendButton.setDisable(false);
           setVersionSelected(2);
         break;
         
         case "version3":
           System.out.println("Versao 3 foi selecionada.");
           screen.setVisible(true);
+          BoxTTL.setVisible(true);
+          BoxTTL.setDisable(false);
+          textTTL.setVisible(true);
+          textTTL.setDisable(false);
+          sendButton.setVisible(true);
+          sendButton.setDisable(false);
           setVersionSelected(3);
         break;
       }
-      if(readBackbone()){
-        addNode(root);
-      };
     }
+  }
+
+  @FXML
+  void clickSend(MouseEvent event) {
+    TTL = textTTL.getValue();
+    textTTL.setVisible(false);
+    textTTL.setDisable(true);
+    BoxTTL.setVisible(false);
+    BoxTTL.setDisable(true);
+    sendButton.setVisible(false);
+    sendButton.setDisable(true);
+
+    if(readBackbone()){
+      addNode(root);
+    };
   }
 
    //Alterna a troca entre telas

@@ -167,21 +167,21 @@ public class mainControl implements Initializable{
         for (int i = 0; i < graph.size(); i++) {
             String[] parts = graph.get(i).split(";");
             if (parts.length >= 2) {
-                int node1 = Integer.parseInt(parts[0]);
-                int node2 = Integer.parseInt(parts[1]);
+                int nodeOne = Integer.parseInt(parts[0]);
+                int nodeTwo = Integer.parseInt(parts[1]);
 
                 Polyline polyline = new Polyline(
-                    routers.get(node1 - 1).getCenterX(), routers.get(node1 - 1).getCenterY(),
-                    routers.get(node2 - 1).getCenterX(), routers.get(node2 - 1).getCenterY()
+                    routers.get(nodeOne - 1).getCenterX(), routers.get(nodeOne - 1).getCenterY(),
+                    routers.get(nodeTwo - 1).getCenterX(), routers.get(nodeTwo - 1).getCenterY()
                 );
                 lines.add(polyline);
-                nodes.get(node1 - 1).addConnection(node2, polyline);
-                nodes.get(node2 - 1).addConnection(node1, polyline);
+                nodes.get(nodeOne - 1).addConnection(nodeTwo, polyline);
+                nodes.get(nodeTwo - 1).addConnection(nodeOne, polyline);
             }
         }
 
         for (Polyline polyline : lines) {
-            polyline.setStroke(Color.BLACK);
+            polyline.setStroke(Color.WHITE);
             polyline.setStrokeWidth(2);
             root.getChildren().add(polyline);
         }

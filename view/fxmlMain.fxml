@@ -15,7 +15,7 @@
                   <Image url="@../imgs/background.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="version1" fitHeight="150.0" fitWidth="200.0" layoutX="350.0" layoutY="365.0" onMouseClicked="#versionSelected" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="version1" fitHeight="22.0" fitWidth="115.0" layoutX="393.0" layoutY="365.0" onMouseClicked="#versionSelected" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../imgs/version1.png" />
                </image>
@@ -23,7 +23,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="version2" fitHeight="150.0" fitWidth="200.0" layoutX="350.0" layoutY="410.0" onMouseClicked="#versionSelected" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="version2" fitHeight="22.0" fitWidth="115.0" layoutX="393.0" layoutY="400.0" onMouseClicked="#versionSelected" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../imgs/version2.png" />
                </image>
@@ -31,7 +31,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="version3" fitHeight="150.0" fitWidth="200.0" layoutX="350.0" layoutY="456.0" onMouseClicked="#versionSelected" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="version3" fitHeight="22.0" fitWidth="115.0" layoutX="393.0" layoutY="436.0" onMouseClicked="#versionSelected" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../imgs/version3.png" />
                </image>
@@ -43,12 +43,12 @@
       </Group>
       <Group>
          <children>
-            <ImageView fx:id="screen" fitHeight="600.0" fitWidth="900.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="screen" fitHeight="600.0" fitWidth="900.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../imgs/screen.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="startButton" fitHeight="150.0" fitWidth="200.0" layoutX="648.0" layoutY="524.0" onMouseClicked="#clickStart" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="startButton" fitHeight="25.0" fitWidth="169.0" layoutX="696.0" layoutY="515.0" onMouseClicked="#clickStart" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../imgs/start.png" />
                </image>

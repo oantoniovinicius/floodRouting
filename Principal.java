@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 import control.mainControl;
 
 public class Principal extends Application{
-
     public static void main(String[] args) {
       launch(args);
     }
@@ -28,5 +27,5 @@ public class Principal extends Application{
       primaryStage.setResizable(false);
       primaryStage.show();
     }
-    
+
 }

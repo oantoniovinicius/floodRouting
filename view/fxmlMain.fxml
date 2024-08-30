@@ -18,6 +18,14 @@
                   <Image url="@../imgs/background.png" />
                </image>
             </ImageView>
+            <ImageView fx:id="aboutButton" fitHeight="13.0" fitWidth="100.0" layoutX="414.0" layoutY="473.0" onMouseClicked="#aboutButton" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../imgs/about.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
             <ImageView fx:id="version1" fitHeight="22.0" fitWidth="100.0" layoutX="400.0" layoutY="334.0" onMouseClicked="#versionSelected" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../imgs/version1.png" />
@@ -59,14 +67,6 @@
                <image>
                   <Image url="@../imgs/helpScreen.png" />
                </image>
-            </ImageView>
-            <ImageView fx:id="aboutButton" fitHeight="13.0" fitWidth="100.0" layoutX="414.0" layoutY="473.0" onMouseClicked="#aboutButton" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../imgs/about.png" />
-               </image>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
             </ImageView>
             <ImageView fx:id="aboutScreen" fitHeight="482.0" fitWidth="617.0" layoutX="143.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>

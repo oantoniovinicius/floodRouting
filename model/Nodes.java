@@ -42,9 +42,7 @@ public class Nodes {
         case 1: // opcao 1
           for(int i = 0; i < nodeConnection.size(); i++){
             Packets packet = new Packets(this.id, nodeConnection.get(i), pathConnection.get(i), mC.getRoot(), -1, mC);
-            packetsCreated.add(packet);
-            packet.start();
-            mC.addPackets();
+            createPacket(packet); //criacao e envio do pacote
           }
           break;
         case 2: // opcao 2
@@ -52,9 +50,7 @@ public class Nodes {
             // criacao do pacote
             if (nodeConnection.get(i) != firstNode) { // envia para todos EXCETO o roteador que encaminhou o pacote para ele
               Packets packet = new Packets(this.id, nodeConnection.get(i), pathConnection.get(i), mC.getRoot(), -1, mC);
-              packetsCreated.add(packet);
-              packet.start();
-              mC.addPackets();
+              createPacket(packet); //criacao e envio do pacote
             }
           }
           break;
@@ -65,9 +61,7 @@ public class Nodes {
               if (nodeConnection.get(i) != firstNode) {// envia para todos EXCETO o roteador que encaminhou o pacote para ele
                 // TTL-1 = subtrai 1 pulo do pacote
                 Packets Pacote = new Packets(this.id, nodeConnection.get(i), pathConnection.get(i), mC.getRoot(), TTL - 1, mC);
-                packetsCreated.add(Pacote);
-                Pacote.start();
-                mC.addPackets();
+                createPacket(Pacote); //criacao e envio do pacote
               }
             }
           }
@@ -108,9 +102,7 @@ public class Nodes {
               if (targetNode != firstNode && !routingTable.getOrDefault(targetNode, false)) { 
                 // TTL-1 = subtrai 1 pulo do pacote
                 Packets packet = new Packets(this.id, targetNode, pathConnection.get(i), mC.getRoot(), TTL - 1, mC);
-                packetsCreated.add(packet);
-                packet.start();
-                mC.addPackets();
+                createPacket(packet); //criacao e envio do pacote
                 routingTable.put(targetNode, true); //marca como recebeu
               }
             }
@@ -121,12 +113,24 @@ public class Nodes {
       }
     } else {
       if(!controlRecebimento){
-        System.out.println("Roteador [ "+ id + " ] recebeu o Pacote");
-        controlRecebimento = !controlRecebimento;
-        mC.packetReceived(this.id);
-        mC.setReceived(true);
+        receivePacket();
       }
     }
+  }
+
+  private void receivePacket() {
+    if (!controlRecebimento) {
+      System.out.println("Roteador [ " + id + " ] recebeu o Pacote");
+      controlRecebimento = true;
+      mC.packetReceived(this.id);
+      mC.setReceived(true);
+    }
+  }
+
+  public void createPacket(Packets pacote){
+    packetsCreated.add(pacote);
+    pacote.start();
+    mC.addPackets();
   }
 
   public void resetRoutingTable() {

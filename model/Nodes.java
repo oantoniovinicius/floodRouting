@@ -1,7 +1,8 @@
 package model;
 
 import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.Map;
 import control.mainControl;
 import javafx.scene.shape.Polyline;
 
@@ -12,6 +13,11 @@ public class Nodes {
   private ArrayList<Polyline> pathConnection = new ArrayList<>(); //Caminho em px desse roteador ate o No que ele conecta
   private ArrayList<Packets> packetsCreated = new ArrayList<>(); //Pacotes Gerados por esse Router
   boolean controlRecebimento = false;
+  private Map<Integer, Boolean> routingTable = new HashMap<>();
+
+  public Nodes(){
+    this.id = 0;
+  }
 
   public Nodes(int id){
     this.id = id;
@@ -66,6 +72,23 @@ public class Nodes {
             }
           }
           break;
+
+        case 4:
+          if (TTL != 0) { // Verifica se o TTL esta zero, caso sim, nao reenvia mais o pacote
+            for (int i = 0; i < nodeConnection.size(); i++) {
+              int targetNode = nodeConnection.get(i);
+              if (targetNode != firstNode && !routingTable.getOrDefault(targetNode, false)) { 
+                // Se o No nao foi de quem ele recebeu e não está marcado como recebeu
+                // Passa o TTL-1, subtraindo 1 pulo do pacote
+                Packets packet = new Packets(this.id, targetNode, pathConnection.get(i), mC.getRoot(), TTL - 1, mC);
+                packetsCreated.add(packet);
+                packet.start();
+                mC.addPackets();
+                routingTable.put(targetNode, true); // Marca como recebeu
+              }
+            }
+          }
+          break;
         default:
             break;
       }
@@ -79,11 +102,15 @@ public class Nodes {
     }
   }
 
+  public void resetRoutingTable() {
+    routingTable.clear();
+  }
+
   public void listConnections() {
-    System.out.println("Roteador " + id + " se conecta com:");
-    System.out.print("Roteador ");
+    System.out.println("Roteador [ " + id + " ] se conecta com:");
     for (int i = 0; i < nodeConnection.size(); i++) {
-      System.out.print(nodeConnection.get(i) + ", ");
+      System.out.print("Roteador ");
+      System.out.println(nodeConnection.get(i));
     }
     System.out.println("");
   }

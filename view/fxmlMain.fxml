@@ -18,7 +18,7 @@
                   <Image url="@../imgs/background.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="version1" fitHeight="22.0" fitWidth="115.0" layoutX="393.0" layoutY="365.0" onMouseClicked="#versionSelected" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="version1" fitHeight="22.0" fitWidth="100.0" layoutX="400.0" layoutY="334.0" onMouseClicked="#versionSelected" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../imgs/version1.png" />
                </image>
@@ -26,7 +26,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="version2" fitHeight="22.0" fitWidth="115.0" layoutX="393.0" layoutY="400.0" onMouseClicked="#versionSelected" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="version2" fitHeight="22.0" fitWidth="100.0" layoutX="400.0" layoutY="369.0" onMouseClicked="#versionSelected" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../imgs/version2.png" />
                </image>
@@ -34,9 +34,17 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="version3" fitHeight="22.0" fitWidth="115.0" layoutX="393.0" layoutY="436.0" onMouseClicked="#versionSelected" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="version3" fitHeight="22.0" fitWidth="100.0" layoutX="400.0" layoutY="405.0" onMouseClicked="#versionSelected" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../imgs/version3.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <ImageView fx:id="version4" fitHeight="22.0" fitWidth="100.0" layoutX="400.0" layoutY="439.0" onMouseClicked="#versionSelected" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../imgs/version4.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
@@ -52,9 +60,17 @@
                   <Image url="@../imgs/helpScreen.png" />
                </image>
             </ImageView>
+            <ImageView fx:id="aboutButton" fitHeight="13.0" fitWidth="100.0" layoutX="414.0" layoutY="473.0" onMouseClicked="#aboutButton" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../imgs/about.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
          </children>
       </Group>
-      <Group>
+      <Group visible="false">
          <children>
             <ImageView fx:id="screen" fitHeight="600.0" fitWidth="900.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -84,7 +100,7 @@
                   <Image url="@../imgs/selectTTL.png" />
                </image>
             </ImageView>
-            <Label fx:id="totalPackages" alignment="CENTER" contentDisplay="CENTER" layoutX="76.0" layoutY="530.0" prefHeight="27.0" prefWidth="121.0" textFill="WHITE">
+            <Label fx:id="totalPackages" alignment="CENTER" contentDisplay="CENTER" layoutX="710.0" layoutY="110.0" prefHeight="27.0" prefWidth="121.0" textFill="WHITE">
                <font>
                   <Font size="16.0" />
                </font>
@@ -103,6 +119,14 @@
             <ImageView fx:id="sendButton" fitHeight="27.0" fitWidth="128.0" layoutX="405.0" layoutY="334.0" onMouseClicked="#clickSend" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../imgs/sendButton.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <ImageView fx:id="resetButton" disable="true" fitHeight="34.0" fitWidth="88.0" layoutX="82.0" layoutY="522.0" onMouseClicked="#reset" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../imgs/reset.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />

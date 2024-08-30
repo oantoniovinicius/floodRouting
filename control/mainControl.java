@@ -32,16 +32,19 @@ public class mainControl implements Initializable{
   @FXML private ImageView version2;
   @FXML private ImageView version3;
   @FXML private ImageView version4;
-  @FXML private ImageView helpButton;
-  @FXML private ImageView helpScreen;
 
+  @FXML private ImageView helpScreen;
+  @FXML private ImageView aboutScreen;
   @FXML private ImageView background;
   @FXML private ImageView screen;
+
   @FXML private ImageView node;
   @FXML private ImageView nodeSent;
   @FXML private ImageView nodeReceive;
 
+  @FXML private ImageView helpButton;
   @FXML private ImageView aboutButton;
+  @FXML private ImageView closeButton;
   @FXML private ImageView sendButton;
   @FXML private ImageView resetButton;
   @FXML private ImageView startButton;
@@ -278,9 +281,8 @@ public class mainControl implements Initializable{
           showAlert("Erro!", "Selecione o Transmissor e/ou Receptor");
         }
         break;
-      case 4:
+      case 4: 
         if(nodeReceiver != -1 && nodeSender != -1){
-          //Inicia a Transmissao
           nodes.get(nodeSender-1).sendPackets(TTL, -1);
           setOffOn(startButton, 0);
           setOffOn(resetButton, 1);
@@ -290,7 +292,7 @@ public class mainControl implements Initializable{
         }
         break;
 
-      default: //Casos 1 ou 2
+      default: 
         if(nodeReceiver != -1 && nodeSender != -1){
           nodes.get(nodeSender-1).sendPackets(TTL, -1);
           setOffOn(startButton, 0);
@@ -298,6 +300,18 @@ public class mainControl implements Initializable{
         } 
         break;
     }
+  }
+
+  @FXML
+  void aboutButton(MouseEvent event) {
+    setOffOn(aboutScreen, 1);
+    setOffOn(closeButton, 1);
+  }
+
+  @FXML
+  void closeButton(MouseEvent event) {
+    setOffOn(aboutScreen, 0);
+    setOffOn(closeButton, 0);
   }
 
   @FXML

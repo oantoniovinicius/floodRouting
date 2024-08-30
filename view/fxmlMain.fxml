@@ -68,9 +68,22 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
+            <ImageView fx:id="aboutScreen" fitHeight="482.0" fitWidth="617.0" layoutX="143.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../imgs/aboutScreen.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="closeButton" disable="true" fitHeight="34.0" fitWidth="36.0" layoutX="129.0" layoutY="45.0" onMouseClicked="#closeButton" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../imgs/closeButton.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
          </children>
       </Group>
-      <Group visible="false">
+      <Group>
          <children>
             <ImageView fx:id="screen" fitHeight="600.0" fitWidth="900.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
                <image>

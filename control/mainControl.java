@@ -1,3 +1,12 @@
+/* ***************************************************************
+* Autor............: Antonio Vinicius Silva Dutra
+* Matricula........: 202110810
+* Inicio...........: 27/08/2024
+* Ultima alteracao.: 08/08/2024
+* Nome.............: mainControl.java
+* Funcao...........: classe responsavel pelo controle da interface grafica.
+Gerencia as imagens, botoes, adiciona os roteadores na interface, altera entre telas, etc.
+****************************************************************/
 package control;
 
 import java.io.BufferedReader;
@@ -69,13 +78,21 @@ public class mainControl implements Initializable{
   int nodeSender = -1;
   int nodeReceiver = -1;
   int totalPackets = 0;
-
+  
   boolean received = false;
   boolean graphFlag = true;
 
   Pane root = new Pane();
   ColorAdjust colorAdjust = new ColorAdjust();
 
+  /* ******************************************************************
+* Metodo: initialize()
+* Funcao: Inicializa a interface grafica, configura efeitos nos botoes e define valores iniciais para componentes como Spinner.
+* Parametros: 
+  - URL location: Localizacao usada para resolver caminhos relativos para o objeto raiz, ou null se nao for conhecido
+  - ResourceBundle resources: Recurso para localizar o objeto raiz, ou null se o objeto raiz nao tiver sido localizado.
+* Retorno: void
+****************************************************************** */
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     buttonEffects();
@@ -88,11 +105,23 @@ public class mainControl implements Initializable{
     textTTL.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 3));
   }
     
+  /* ******************************************************************
+  * Metodo: readBackbone()
+  * Funcao: le o arquivo backbone.txt e armazena cada linha no ArrayList graph. 
+  Verifica se o arquivo eh valido e caso nao seja valido, dispara uma mensagem de erro
+  * Parametros: Nenhum
+  * Retorno: boolean - true se o arquivo foi lido com sucesso, false se ocorreu um erro.
+  ****************************************************************** */
   public boolean readBackbone(){
     String backbone = "./backbone.txt";
     try {
       File file = new File(backbone);
-      System.out.println("Backbone valido: " + file.exists());
+      //apenas um print caso o arquivo seja valido ou nao
+      if(file.exists()){
+        System.out.println("Backbone valido!");
+      } else {
+        System.out.println("Backbone nao existe");
+      }
 
       //bufferedreader responsavel pela leitura do arquivo
       BufferedReader reader = new BufferedReader(new FileReader(backbone));
@@ -114,9 +143,15 @@ public class mainControl implements Initializable{
     }
   }
 
+  /* ******************************************************************
+  * Metodo: addNode
+  * Funcao: Adiciona nos / roteadores na interface grfica. Verifica se o numero de roteadores eh valido antes de prosseguir
+  * Parametros: Pane root: O painel raiz onde os componentes graficos serao adicionados.
+  * Retorno: void
+  ****************************************************************** */
   public void addNode(Pane root) {
     int totalNodes = Integer.parseInt(graph.get(0).replaceAll(";", ""));
-    System.out.println("Numero de roteadores na rede: " + totalNodes);
+    System.out.println("Numero de roteadores totais: " + totalNodes);
 
     if (totalNodes < 21) {
       ArrayList<Circle> routers = createCircles(root, totalNodes);
@@ -130,6 +165,14 @@ public class mainControl implements Initializable{
     }
   }
 
+  /* ******************************************************************
+  * Metodo: createCircles
+  * Funcao: Cria circulos (imagens) que representam os roteadores na interface grafica e os posiciona em forma de circulo ao redor do painel raiz
+  * Parametros: 
+    - Pane root: O painel onde os circulos serao adicionados
+    - int numCircles: O numero total de roteadores (circulos) a serem criados
+  * Retorno: ArrayList<Circle> - Lista de circulos que representam os roteadores
+****************************************************************** */
   private ArrayList<Circle> createCircles(Pane root, int numCircles) {
     ArrayList<Circle> routers = new ArrayList<>();
     double centerX = root.getWidth() / 2;
@@ -152,6 +195,14 @@ public class mainControl implements Initializable{
     return routers;
   }
 
+  /* ******************************************************************
+   Metodo: createLabels
+  * Funcao: Cria rotulos para cada roteador, mostrando o nomero do roteador proximo a imagem correspondente a ele na interface
+  * Parametros: 
+    - Pane root: O painel onde os rotulos serao adicionados
+    - ArrayList<Circle> routers: Lista de circulos que representam os roteadores.
+  * Retorno: void
+  ****************************************************************** */
   private void createLabels(Pane root, ArrayList<Circle> routers) {
     for (int i = 0; i < routers.size(); i++) {
       Circle node = routers.get(i);
@@ -166,6 +217,14 @@ public class mainControl implements Initializable{
     }
   }
 
+  /* ******************************************************************
+  * Metodo: createConnections
+  * Funcao: Cria linhas que conectam os roteadores na interface grafica, representando as conexoes entre eles
+  * Parametros: 
+    - Pane root: O painel onde as conexoes (linhas) serao adicionadas
+    - ArrayList<Circle> routers: Lista de circulos que representam os roteadores
+  * Retorno: void
+  ****************************************************************** */
   private void createConnections(Pane root, ArrayList<Circle> routers) {
     for (String line : graph) {
       String[] parts = line.split(";");
@@ -184,6 +243,14 @@ public class mainControl implements Initializable{
     }
   }
 
+  /* ******************************************************************
+  * Metodo: assembleGraph
+  * Funcao: Adiciona os circulos, linhas e rotulos ao painel raiz para formar o grafo visual que representa a rede de roteadores
+  * Parametros: 
+    - Pane root: O painel onde os elementos do grafo serão adicionados
+    - ArrayList<Circle> routers: Lista de circulos que representam os roteadores
+  * Retorno: void
+  ****************************************************************** */
   private void assembleGraph(Pane root, ArrayList<Circle> routers) {
     for (Polyline Line : lines) {
       Line.setStroke(Color.BLACK);
@@ -208,29 +275,28 @@ public class mainControl implements Initializable{
     }
   }
 
-  private void showAlert(String title, String header) {
-    Alert alert = new Alert(AlertType.WARNING);
-    alert.setTitle(title);
-    alert.setHeaderText(header);
-    alert.showAndWait();
-  }
-
-  //Escolha no inicial
+  /* ******************************************************************
+  * Metodo: selectFirstNode
+  * Funcao: Permite que o usuurio selecione o roteador transmissor na interface, desativando o clique apos a selecao.
+  * Parametros: Nenhum
+  * Retorno: void
+  ****************************************************************** */
   public void selectFirstNode() {
     for (int i = 0; i < nodeImage.size(); i++) {
       nodeImage.get(i).setCursor(Cursor.HAND);
-      final int posicao = i; // Armazena a posição atual do loop
+      final int posicao = i; // armazena a posicao atual do loop
       nodeImage.get(i).setOnMouseClicked(event -> {
         int id = posicao+1;
-        System.out.println("Transmissor [ " + id + " ] selecionado."); // Imprime a posição
+        System.out.println("Transmissor [ " + id + " ] selecionado."); // informa o id do roteador escolhido
 
-        setNodeInicial(id); // Setando o valor do No Inicial
+        setNodeInicial(id); // setando o valor do roteador transmissor
         nodeImage.get(posicao).setImage(new Image("./imgs/nodeSender.png"));
-        // Remova o evento de clique de todas as imagens
+        // abaixo remove o evento de clique de todas as imagens
         for (ImageView imageView : nodeImage) {
           imageView.setOnMouseClicked(null);
           imageView.setCursor(null);
         }
+        //seta na label da interface qual o id do transmissor
         senderId.setText(Integer.toString(getNodeSender()));
 
         setOffOn(selectSender, 0);
@@ -239,25 +305,32 @@ public class mainControl implements Initializable{
     }
   }
 
-  //Escolha no final
+  /* ******************************************************************
+  * Metodo: selectFinalNode
+  * Funcao: Permite que o usuurio selecione o roteador receptor na interface , desativando o clique apos a selecao
+  * Parametros: Nenhum
+  * Retorno: void
+  ****************************************************************** */
   public void selectFinalNode() {
     selectReceiver.setVisible(true);
 
     for (int i = 0; i < nodeImage.size(); i++) {
-      if(i != getNodeSender()-1){ // Todos Nos possiveis, menos o inicial
+      if(i != getNodeSender()-1){ // todos os roteadores menos o transmissor
         nodeImage.get(i).setCursor(Cursor.HAND);
-        final int posicao = i; // Armazena a posicao atual do loop
+        final int posicao = i; // armazena a posicao atual do loop
         nodeImage.get(i).setOnMouseClicked(event -> {
           int id = posicao + 1;
-          System.out.println("Receptor [ " + id + " ] selecionado."); // Imprime a posicao
+          System.out.println("Receptor [ " + id + " ] selecionado."); //informa o id do roteador escolhido
 
-          setNodeFinal(id); // Setando o valor do No Inicial
+          setNodeFinal(id); // setando o valor do roteador receptor
           nodeImage.get(posicao).setImage(new Image("./imgs/nodeReceiver.png"));
-          // Remova o evento de clique de todas as imagens
+          // abaixo remove o evento de clique de todas as imagens
           for (ImageView imageView : nodeImage) {
             imageView.setOnMouseClicked(null);
             imageView.setCursor(null);
           }
+
+          //seta na label da interface qual o id do receptor
           receiverId.setText(Integer.toString(getNodeReceiver()));
 
           setOffOn(selectReceiver, 0);
@@ -267,58 +340,88 @@ public class mainControl implements Initializable{
     }
   }
 
+  /* ******************************************************************
+  * Metodo: showAlert
+  * Funcao: Exibe uma caixa de dialogo de alerta com uma mensagem personalizada (geralmente de erro)
+  * Parametros: 
+    - String title: O titulo da caixa de dialogo.
+    - String header: A mensagem exibida na caixa de dialogo.
+  * Retorno: void
+  ****************************************************************** */
+  public void showAlert(String title, String header) {
+    Alert alert = new Alert(AlertType.WARNING);
+    alert.setTitle(title);
+    alert.setHeaderText(header);
+    alert.showAndWait();
+  }
+
+  /* ******************************************************************
+  * Metodo: clickStart
+  * Funcao: inicia a transmissao depois que o transmissor e o receptor forem escolhidos
+  * Parametros: 
+    - Mouse event -> clique do mouse no botao
+  * Retorno: void
+  ****************************************************************** */
   @FXML
   void clickStart(MouseEvent event) {
     switch (getVersionSelected()) {
       case 3:
-        if(nodeReceiver != -1 && nodeSender != -1){
-          //Inicia a Transmissao
-          nodes.get(nodeSender-1).sendPackets(TTL, -1);
-          setOffOn(startButton, 0);
-          setOffOn(resetButton, 1);
-        }
-        else{
-          showAlert("Erro!", "Selecione o Transmissor e/ou Receptor");
-        }
+        nodes.get(nodeSender-1).sendPackets(TTL, -1);
+        setOffOn(startButton, 0);
+        setOffOn(resetButton, 1);
         break;
       case 4: 
-        if(nodeReceiver != -1 && nodeSender != -1){
-          nodes.get(nodeSender-1).sendPackets(TTL, -1);
-          setOffOn(startButton, 0);
-          setOffOn(resetButton, 1);
-        }
-        else{
-          showAlert("Erro!", "Selecione o Transmissor e/ou Receptor");
-        }
+        nodes.get(nodeSender-1).sendPackets(TTL, -1);
+        setOffOn(startButton, 0);
+        setOffOn(resetButton, 1);
         break;
-
       default: 
-        if(nodeReceiver != -1 && nodeSender != -1){
-          nodes.get(nodeSender-1).sendPackets(TTL, -1);
-          setOffOn(startButton, 0);
-          setOffOn(resetButton, 1);
-        } 
+        nodes.get(nodeSender-1).sendPackets(TTL, -1);
+        setOffOn(startButton, 0);
+        setOffOn(resetButton, 1);
         break;
     }
   }
 
+   /* ******************************************************************
+  * Metodo: aboutButton
+  * Funcao: mostra a tela com as informacoes sobre a versao 4
+  * Parametros: 
+    - Mouse event -> clique do mouse no botao
+  * Retorno: void
+  ****************************************************************** */
   @FXML
   void aboutButton(MouseEvent event) {
     setOffOn(aboutScreen, 1);
     setOffOn(closeButton, 1);
   }
 
+  /* ******************************************************************
+  * Metodo: closeButton
+  * Funcao: fecha a tela com as informacoes sobre a versao 4
+  * Parametros: 
+    - Mouse event -> clique do mouse no botao
+  * Retorno: void
+  ****************************************************************** */
   @FXML
   void closeButton(MouseEvent event) {
     setOffOn(aboutScreen, 0);
     setOffOn(closeButton, 0);
   }
 
+  /* ******************************************************************
+  * Metodo: reset
+  * Funcao: eh um botao que chama o metodo resetVariables para fazer o programa voltar ao seu estado inicial.
+  Desliga todos os botoes da tela de execucao e liga novamente os botoes e imagens do menu principal
+  * Parametros: 
+    - Mouse event -> clique do mouse no botao
+  * Retorno: void
+  ****************************************************************** */
   @FXML
   void reset(MouseEvent event) {
-    removeElementos();
-    for(int i = 0; i < nodes.size(); i++){
-      nodes.get(i).stopPackages();
+    removeGraphs();
+    for(int i = 0; i < nodes.size(); i++){ 
+      nodes.get(i).stopPackages(); //para a animacao dos pacotes
     }
 
     resetVariables();
@@ -338,6 +441,13 @@ public class mainControl implements Initializable{
     routers.resetRoutingTable();
   }
 
+  /* ******************************************************************
+  * Metodo: resetVariables
+  * Funcao: reseta todas as variaveis, threads e imagens
+  * Parametros: 
+    - Mouse event -> clique do mouse no botao
+  * Retorno: void
+  ****************************************************************** */
   public void resetVariables(){
     graph = new ArrayList<>();
     nodes = new ArrayList<>();
@@ -357,6 +467,12 @@ public class mainControl implements Initializable{
     textTTL.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 3));
   }
 
+  /* ******************************************************************
+  * Metodo: buttonEffects
+  * Funcao: aplica efeitos de brilho nos botoes da interface
+  * Parametros: Nenhum
+  * Retorno: void
+  ****************************************************************** */
   public void buttonEffects(){
     colorAdjust.setBrightness(0.5);
 
@@ -425,8 +541,13 @@ public class mainControl implements Initializable{
     });
   }
 
-  //Remove grafo da tela
-  public void removeElementos(){
+  /* ******************************************************************
+  * Metodo: removeGraphs
+  * Funcao: remove os grafos da tela
+  * Parametros: Nenhum
+  * Retorno: void
+  ****************************************************************** */
+  public void removeGraphs(){
     for (ImageView image : nodeImage) {
       getRoot().getChildren().remove(image);
     }
@@ -438,6 +559,12 @@ public class mainControl implements Initializable{
     }
   }
 
+  /* ******************************************************************
+  * Metodo: addPackets
+  * Funcao: incrementa o numero total de pacotes gerados e seta o valor deles na interface
+  * Parametros: Nenhum
+  * Retorno: void
+  ****************************************************************** */
   public void addPackets(){ 
     if(!received){
       totalPackets++;
@@ -445,17 +572,31 @@ public class mainControl implements Initializable{
     }
   }
 
+  /* ******************************************************************
+  * Metodo: packetReceived
+  * Funcao: troca a imagem do roteador receptor caso ele tenha recebido o pacote
+  * Parametros: 
+    - Int node -> informe o roteador que recebeu o pacote
+  * Retorno: void
+  ****************************************************************** */
   public void packetReceived(int node){
     nodeImage.get(node-1).setImage(new Image("./imgs/packetReceived.png"));
   }
 
+  /* ******************************************************************
+  * Metodo: versionSelected
+  * Funcao: troca a tela e inicia o programa dependendo da versao escolhida pelo usuario na interface
+  * Parametros: 
+    - MouseEvent event -> clique do mouse em um dos botoes
+  * Retorno: void
+  ****************************************************************** */
   @FXML
   void versionSelected(MouseEvent event) {
     if(graphFlag){
       Node source = (Node) event.getSource();
-      switch (source.getId()) { // Verifica qual botao foi escolhido
+      switch (source.getId()) { // verifica qual versao foi escolhida
         case "version1":
-          System.out.println("Versão selecionada: 1");
+          System.out.println("Versao selecionada: 1");
           setOffOn(screen, 1);
           
           startProgram();
@@ -463,7 +604,7 @@ public class mainControl implements Initializable{
         break;
         
         case "version2":
-          System.out.println("Versão selecionada: 2");
+          System.out.println("Versao selecionada: 2");
           screen.setVisible(true);
 
           startProgram();
@@ -471,7 +612,7 @@ public class mainControl implements Initializable{
         break;
         
         case "version3":
-          System.out.println("Versão selecionada: 3");
+          System.out.println("Versao selecionada: 3");
           textTTL.setVisible(true);
           textTTL.setDisable(false);
           setOffOn(screen, 1);
@@ -482,7 +623,7 @@ public class mainControl implements Initializable{
         break;
 
         case "version4":
-          System.out.println("Versão selecionada: 4");
+          System.out.println("Versao selecionada: 4");
           textTTL.setVisible(true);
           textTTL.setDisable(false);
           setOffOn(screen, 1);
@@ -494,8 +635,15 @@ public class mainControl implements Initializable{
     }
   }
 
+  /* ******************************************************************
+  * Metodo: sendTTL
+  * Funcao: envia e armazena o valor do TTL escolhido no spinner
+  * Parametros: 
+    - MouseEvent event -> clique do mouse no botao
+  * Retorno: void
+  ****************************************************************** */
   @FXML
-  void clickSend(MouseEvent event) {
+  void sendTTL(MouseEvent event) {
     TTL = textTTL.getValue();
     System.out.println("Valor do TTL: " + TTL);
 
@@ -506,13 +654,28 @@ public class mainControl implements Initializable{
     startProgram();
   }
 
+  /* ******************************************************************
+  * Metodo: startProgram()
+  * Funcao: responsavel por iniciar o programa de fato nas versoes 3 e 4.
+  Verifica se a leitura do backbone teve sucesso e assim, inicia o programa
+  * Parametros: Nenhum
+  * Retorno: void
+  ****************************************************************** */
   public void startProgram(){
     if(readBackbone()){
       addNode(root);
     };
   }
 
-  //Desliga ou liga imagens/botoes do tipo imageView, conforme parametro
+  /* ******************************************************************
+  * Metodo: settOffOn
+  * Funcao: Desliga ou liga imagens/botoes do tipo imageView, conforme parametro.
+  * Parametros: 
+    - ImageView image -> a imagem que vai ser ligada ou desligada
+    - Int turn -> Informa se vai ser ligada ou desligada dependendo do seu valor
+  * Retorno: void
+  ****************************************************************** */
+  @FXML
   public void setOffOn(ImageView image, int turn){
     if (turn == 0){
       image.setVisible(false);
@@ -524,7 +687,12 @@ public class mainControl implements Initializable{
 
   }
 
-  //Alterna a troca entre telas
+  /* ******************************************************************
+  * Metodo: changeScreen
+  * Funcao: realiza a troca de telas utilizando o metodo setOffOn
+  * Parametros: Nenhum
+  * Retorno: void
+  ****************************************************************** */
    public void changeScreen() {
     setOffOn(version1, 0);
     setOffOn(version2, 0);
@@ -535,7 +703,7 @@ public class mainControl implements Initializable{
     setOffOn(resetButton, 1);
   }
 
-  //getter and setters
+  //getters and setters
   public ArrayList<Nodes> getNodes() {
     return nodes;
   }

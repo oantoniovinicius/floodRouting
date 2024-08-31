@@ -1,3 +1,14 @@
+/* ***************************************************************
+* Autor............: Antonio Vinicius Silva Dutra
+* Matricula........: 202110810
+* Inicio...........: 27/08/2024
+* Ultima alteracao.: 08/08/2024
+* Nome.............: Nodes.java
+* Funcao...........: classe responsavel por gerenciar os roteadores. 
+Isso inclui as informacoes do roteador, suas conexoes, criacao e replicacao de pacotes,
+verificacoes, etc
+****************************************************************/
+
 package model;
 
 import java.util.ArrayList;
@@ -31,11 +42,27 @@ public class Nodes {
     this.mC = mainController;
   }
 
+  /* ******************************************************************
+  * Metodo: addConnection(int connected, Polyline route)
+  * Funcao: Adiciona uma conexao de roteador com outro roteador e armazena o caminho visual correspondente.
+  * Parametros: 
+  *  - int connected: ID do roteador conectado
+  *  - Polyline route: Caminho visual que conecta os dois roteadores
+  * Retorno: void
+  ****************************************************************** */
   public void addConnection(int connected, Polyline route){
     nodeConnection.add(connected);
     pathConnection.add(route);
-  }
+  } //fim do metodo addConnection
 
+  /********************************************************************
+  * Metodo: sendPackets(int TTL, int firstNode)
+  * Funcao: Envia pacotes para os roteadores conectados, com base na versao selecionada na interface
+  * Parametros: 
+  *  - int TTL: Time To Live (TTL) do pacote, representando o numero de saltos restantes
+  *  - int firstNode: ID do roteador que enviou o pacote originalmente
+  * Retorno: void
+  ****************************************************************** */
   public void sendPackets(int TTL, int firstNode){
     if(mC.getNodeReceiver() != this.id){
       switch (mC.getVersionSelected()) {
@@ -47,7 +74,6 @@ public class Nodes {
           break;
         case 2: // opcao 2
           for (int i = 0; i < nodeConnection.size(); i++) {
-            // criacao do pacote
             if (nodeConnection.get(i) != firstNode) { // envia para todos EXCETO o roteador que encaminhou o pacote para ele
               Packets packet = new Packets(this.id, nodeConnection.get(i), pathConnection.get(i), mC.getRoot(), -1, mC);
               createPacket(packet); //criacao e envio do pacote
@@ -57,7 +83,6 @@ public class Nodes {
         case 3: // opcao 3
           if (TTL != 0) { // se TTL = 0 nao envia mais o pacote
             for (int i = 0; i < nodeConnection.size(); i++) { // encaminha para todos EXCETO quem enviou e verifica o TTL
-            // criacao do pacote
               if (nodeConnection.get(i) != firstNode) {// envia para todos EXCETO o roteador que encaminhou o pacote para ele
                 // TTL-1 = subtrai 1 pulo do pacote
                 Packets Pacote = new Packets(this.id, nodeConnection.get(i), pathConnection.get(i), mC.getRoot(), TTL - 1, mC);
@@ -68,7 +93,7 @@ public class Nodes {
           break;
 
         /* Version 4:
-        Essa implementacao oferece uma melhoria em relacao ao algoritmo 3 ao implementar uma “tabela de roteamento dinamica”. 
+        Essa implementacao oferece uma melhoria em relacao ao algoritmo 3 ao implementar uma tabela de roteamento dinamica
         Ou seja, ao inves de enviar pacotes para todos os roteadores conectados a todo instante, 
         ele mantém uma tabela com informacoes sobre quais roteadores ja receberam pacotes com sucesso, 
         ajudando a evitar o reenvio desnecessario de pacotes para os mesmos roteadores.
@@ -95,29 +120,33 @@ public class Nodes {
         Se o roteador nao estiver marcado ou se nao tiver informacao sobre ele (nao recebeu um pacote), o roteador envia um pacote
         e o roteador sera marcado como "recebeu"  */
         case 4:
-          if (TTL != 0) { // se TTL = 0 nao envia mais o pacote
-            for (int i = 0; i < nodeConnection.size(); i++) {
-              int targetNode = nodeConnection.get(i);
-              //verifica se o roteador de destino ja recebeu o pacote e se o pacote deve ser enviado de volta para o roteador que o enviou
-              if (targetNode != firstNode && !routingTable.getOrDefault(targetNode, false)) { 
-                // TTL-1 = subtrai 1 pulo do pacote
-                Packets packet = new Packets(this.id, targetNode, pathConnection.get(i), mC.getRoot(), TTL - 1, mC);
-                createPacket(packet); //criacao e envio do pacote
-                routingTable.put(targetNode, true); //marca como recebeu
-              }
+        if (TTL != 0) { // se TTL = 0 nao envia mais o pacote
+          for (int i = 0; i < nodeConnection.size(); i++) {
+            int targetNode = nodeConnection.get(i);
+            //verifica se o roteador de destino ja recebeu o pacote e se o pacote deve ser enviado de volta para o roteador que o enviou
+            if (targetNode != firstNode && !routingTable.getOrDefault(targetNode, false)) { 
+              // TTL-1 = subtrai 1 pulo do pacote
+              Packets packet = new Packets(this.id, targetNode, pathConnection.get(i), mC.getRoot(), TTL - 1, mC);
+              createPacket(packet); //criacao e envio do pacote
+              routingTable.put(targetNode, true); //marca como recebeu
             }
           }
-          break;
+        } 
+        break;
         default:
             break;
       }
     } else {
-      if(!controlRecebimento){
-        receivePacket();
-      }
+      receivePacket();
     }
-  }
+  } //fim do metodo sendPackets()
 
+  /* *******************************************************************
+  * Metodo: receivePacket()
+  * Funcao: Registra o recebimento de um pacote e atualiza o estado de controle de recebimento
+  * Parametros: Nenhum
+  * Retorno: void
+  ****************************************************************** */
   private void receivePacket() {
     if (!controlRecebimento) {
       System.out.println("Roteador [ " + id + " ] recebeu o Pacote");
@@ -125,18 +154,37 @@ public class Nodes {
       mC.packetReceived(this.id);
       mC.setReceived(true);
     }
-  }
+  } //fim do metodo receivePacket()
 
+  /* *******************************************************************
+  * Metodo: createPacket(Packets pacote)
+  * Funcao: Cria um novo pacote, inicia sua transmissao e registra ele na lista de pacotes criados
+  * Parametros: Packets pacote = pacote a ser criado e enviado
+  * Retorno: void
+  ****************************************************************** */
   public void createPacket(Packets pacote){
     packetsCreated.add(pacote);
     pacote.start();
     mC.addPackets();
-  }
+  } //fim do metodo createPacket()
 
+  /* *******************************************************************
+  * Metodo: resetRoutingTable()
+  * Funcao: Reseta a tabela de roteamento limpando todas as entradas
+  * Parametros: Nenhum
+  * Retorno: void
+  ****************************************************************** */
   public void resetRoutingTable() {
     routingTable.clear();
-  }
+  } //fim do metodo resetRoutingTable()
 
+
+  /* *******************************************************************
+  * Metodo: listConnections()
+  * Funcao: Lista as conexoes desse roteador com outros roteadores, disponiveis no backbone
+  * Parametros: Nenhum
+  * Retorno: void
+  ****************************************************************** */
   public void listConnections() {
     System.out.println("Roteador [ " + id + " ] se conecta com:");
     for (int i = 0; i < nodeConnection.size(); i++) {
@@ -144,8 +192,14 @@ public class Nodes {
       System.out.println(nodeConnection.get(i));
     }
     System.out.println("");
-  }
+  } //fim do metodo listConnections()
 
+  /* ******************************************************************
+  * Metodo: stopPackages()
+  * Funcao: para todos os pacotes em transito e limpa a lista de pacotes criados
+  * Parametros: nenhum
+  * Retorno: void
+  ****************************************************************** */
   public void stopPackages(){
     for(Packets Pack: packetsCreated){
       Pack.setControlFinished(false);
@@ -153,5 +207,5 @@ public class Nodes {
       Pack.interrupt();
     }
     packetsCreated.clear();
-  }
+  }//fim do metodo stopPackages()
 }

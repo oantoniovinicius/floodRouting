@@ -643,7 +643,7 @@ public class mainControl implements Initializable{
   * Retorno: void
   ****************************************************************** */
   @FXML
-  void sendTTL(MouseEvent event) {
+  public void sendTTL(MouseEvent event) {
     TTL = textTTL.getValue();
     System.out.println("Valor do TTL: " + TTL);
 

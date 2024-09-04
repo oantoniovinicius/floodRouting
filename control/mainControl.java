@@ -67,11 +67,11 @@ public class mainControl implements Initializable{
   @FXML private ImageView BoxTTL;
   @FXML private Spinner<Integer> textTTL;
 
-  ArrayList<String> graph = new ArrayList<>(); // Nos do Grafo para leitura do txt e implementacao visual
-  ArrayList<Nodes> nodes = new ArrayList<>(); // Roteadores
-  ArrayList<ImageView> nodeImage = new ArrayList<>(); // Imagem dos roteadores
-  ArrayList<Polyline> lines = new ArrayList<>(); //Linha visual que conecta os roteadores
-  ArrayList<Label> numbers = new ArrayList<>(); // Numero dos Roteadores
+  ArrayList<String> graph = new ArrayList<>(); //roteadores do Grafo para leitura do txt e implementacao visual
+  ArrayList<Nodes> nodes = new ArrayList<>(); //roteadores
+  ArrayList<ImageView> nodeImage = new ArrayList<>(); //imagem dos roteadores
+  ArrayList<Polyline> lines = new ArrayList<>(); //linha visual que conecta os roteadores (rota)
+  ArrayList<Label> numbers = new ArrayList<>(); //numero dos Roteadores
 
   int versionSelected = 0;
   int TTL = 1;
@@ -86,13 +86,13 @@ public class mainControl implements Initializable{
   ColorAdjust colorAdjust = new ColorAdjust();
 
   /* ******************************************************************
-* Metodo: initialize()
-* Funcao: Inicializa a interface grafica, configura efeitos nos botoes e define valores iniciais para componentes como Spinner.
-* Parametros: 
+  * Metodo: initialize()
+  * Funcao: Inicializa a interface grafica, configura efeitos nos botoes e define valores iniciais para componentes como Spinner.
+  * Parametros: 
   - URL location: Localizacao usada para resolver caminhos relativos para o objeto raiz, ou null se nao for conhecido
   - ResourceBundle resources: Recurso para localizar o objeto raiz, ou null se o objeto raiz nao tiver sido localizado.
-* Retorno: void
-****************************************************************** */
+  * Retorno: void
+  ****************************************************************** */
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     buttonEffects();

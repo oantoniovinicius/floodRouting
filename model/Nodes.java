@@ -2,7 +2,7 @@
 * Autor............: Antonio Vinicius Silva Dutra
 * Matricula........: 202110810
 * Inicio...........: 27/08/2024
-* Ultima alteracao.: 08/08/2024
+* Ultima alteracao.: 08/09/2024
 * Nome.............: Nodes.java
 * Funcao...........: classe responsavel por gerenciar os roteadores. 
 Isso inclui as informacoes do roteador, suas conexoes, criacao e replicacao de pacotes,

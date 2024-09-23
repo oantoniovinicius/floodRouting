@@ -2,7 +2,7 @@
 * Autor............: Antonio Vinicius Silva Dutra
 * Matricula........: 202110810
 * Inicio...........: 27/08/2024
-* Ultima alteracao.: 08/08/2024
+* Ultima alteracao.: 08/09/2024
 * Nome.............: Packets.java
 * Funcao...........: classe responsavel pelo gerenciamentos dos pacotes. 
 Isso inclui as threads e as suas animacoes, assim como todas as variveis necessarias para

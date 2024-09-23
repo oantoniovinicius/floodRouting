@@ -24,6 +24,20 @@ Basicamente a Versão 4 mantém a Versão 3 e a melhora ao criar uma tabela de r
 - Interface gráfica inspirada em um mundo medieval (Dark Souls);
 
 ## Aplicação em execução:
+### Menu principal:
+![Layout](https://github.com/oantoniovinicius/floodRouting/blob/main/imgs/menuFlood.gif)
+
+### Versão 1:
+![Layout](https://github.com/oantoniovinicius/floodRouting/blob/main/imgs/version1.gif)
+
+### Versão 2:
+![Layout](https://github.com/oantoniovinicius/floodRouting/blob/main/imgs/version2.gif)
+
+### Versão 3:
+![Layout](https://github.com/oantoniovinicius/floodRouting/blob/main/imgs/version3.gif)
+
+### Versão 4:
+![Layout](https://github.com/oantoniovinicius/floodRouting/blob/main/imgs/version4.gif)
 
 ## Autores:
 - [@oantoniovinicius](https://www.github.com/oantoniovinicius)

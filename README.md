@@ -21,7 +21,7 @@ Basicamente a Versão 4 mantém a Versão 3 e a melhora ao criar uma tabela de r
 
 - Simulação de roteamento e envio de pacotes na rede, definida por um backbone proposto como parte do projeto;
 - Escolha de Roteador transmissor e receptor;
-- Interface gráfica inspirada em um mundo medieval (Dark Souls);
+- Interface gráfica inspirada em um mundo medieval, especificamente do jogo Dark Souls;
 
 ## Aplicação em execução:
 ### Menu principal:
